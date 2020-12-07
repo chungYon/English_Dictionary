@@ -1,16 +1,65 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+    <title>Find out</title>
 </head>
+<style>
+    body{
+        background-color: #002060;
+    }
+    form{
+        text-align: center;
+        margin-top: 250px;
+    }
+    #search-window{
+        border: 1px solid darkblue;
+        width: 20vw;
+        height: 10vh;
+        border-radius: 50px;
+        font-size: 100%;
+        text-align: center;
+        background-color: #6A94F7;
+    }
+    #submit-button{
+        border: 1px solid darkblue;
+        width: 5vw;
+        height: 9vh;
+        background-color: #40F08B;
+        border-radius: 50px ;
+        position: relative;
+        {#transform: translate(-115%, 0%);#}
+    }
+    ul {
+        display: table;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 200%;
+    }
+    *{
+        color: white;
+    }
+    .err-message{
+        text-align: center;
+    }
+</style>
 <body>
-    <h1>{{ question.question_text }}</h1>
+
+    <form action="{% url 'polls:results' %}" method="post">{% csrf_token %}
+        <input type="search" name="q" value="{{query}}" id="search-window">
+        <input type="submit" id="submit-button">
+    </form>
+    {% if error_message %}<p class="err-message"><strong>{{ error_message }}</strong></p>{% endif %}
+    {% if words %}
     <ul>
-        {% for choice in question.choice_set.all %}
-            <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+        {% for word in words %}
+            <li><a href="{% url 'polls:detail' word.id%}">{{word.word_text}}</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+    {% else %}
+    <p class="err-message"> no such words in this app</p>
+    {% endif %}
 </body>
 </html>

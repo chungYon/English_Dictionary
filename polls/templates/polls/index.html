@@ -2,17 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Find out</title>
 </head>
+<style>
+    body{
+        background-color: #002060;
+    }
+    form{
+        text-align: center;
+        margin-top: 250px;
+    }
+    #search-window{
+        border: 1px solid darkblue;
+        width: 20vw;
+        height: 10vh;
+        border-radius: 50px;
+        font-size: 100%;
+        color: white;
+        text-align: center;
+        background-color: #6A94F7;
+    }
+    #submit-button{
+        border: 1px solid darkblue;
+        width: 5vw;
+        height: 9vh;
+        background-color: #40F08B;
+        border-radius: 50px ;
+        position: relative;
+    }
+</style>
 <body>
-    {% if latest_question_list %}
-        <ul>
-            {% for question in latest_question_list %}
-            <li><a href="/polls/{{ question.id }}">{{ question.question_text }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No polls are available.</p>
-    {% endif %}
+    <form action="{% url 'polls:results' %}" method="post">{% csrf_token %}
+        <input type="search" name="q" id="search-window">
+        <input type="submit" id="submit-button" value="search">
+    </form>
 </body>
 </html>

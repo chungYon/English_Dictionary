@@ -1,18 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+    <title>Find out</title>
 </head>
+<style>
+    body{
+        background-color: #002060;
+    }
+    *:not(ol){
+        color: white;
+        text-align: center;
+    }
+    ol{
+        display: table;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 200%;
+        color: white;
+    }
+</style>
 <body>
-    <h1>{{ question.question_text }}</h1>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    <form action="{% url 'polls:vote' question.id %}" method="post">{% csrf_token %}
-        {% for choice in question.choice_set.all %}
-            <input type="radio" id="choice{{ forloop.counter }}" name="choice" value="{{ choice.id }}">
-            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+
+    <div>
+        {% if not word %}<h1>Cannot find the word.</h1>{% endif %}
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+        <h1>{{ word }}</h1>
+        <h2>meanings</h2>
+        <ol>
+            {% for meaning in meanings %}
+                <li>{{ meaning }}</li>
+            {% endfor %}
+        </ol>
+        <hr>
+        <h2>synonyms</h2>
+        {% for synonym in synonyms %}
+            <a href="{% url 'polls:detail_str' synonym %}">{{ synonym }}</a>,
         {% endfor %}
-        <input type="submit" value="Vote">
-    </form>
+    </div>
 </body>
 </html>
